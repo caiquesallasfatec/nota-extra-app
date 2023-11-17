@@ -4,6 +4,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import './css/bootstrap.min.css';
+import './css/bootstrap-icons.css';
+import './css/templatemo-topic-listing.css';
+import './js/bootstrap.bundle.min.js';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

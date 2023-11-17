@@ -1,9 +1,8 @@
 import React from 'react';
-
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { isNull } from 'util';
-
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const validateEmail = (email) => {
     return null != String(email)
@@ -15,10 +14,24 @@ const validateEmail = (email) => {
 
 
 const LoginForm: React.FC = () => {
-    const handleSubmit = (values, { resetForm }) => {
-        // Lide com o envio do formulário aqui
-        console.log('Valores enviados:', values);
-        resetForm();
+    const navigate = useNavigate()
+
+    const handleSubmit = async (values, { setErrors }) => {
+        try {
+            // Faça a solicitação para a rota de login
+            const response = await axios.post('http://localhost:8000/api/login', {
+                username: values.username,
+                password: values.password,
+                institution: values.institution,
+            });
+
+            // Se a autenticação for bem-sucedida, redirecione para a página home
+            navigate('/home');
+        } catch (error) {
+            // Se a autenticação falhar, exiba uma mensagem de erro
+            console.error('Falha na autenticação', error);
+            setErrors({ username: 'Falha na autenticação' });
+        }
     };
 
     return (
@@ -42,6 +55,8 @@ const LoginForm: React.FC = () => {
                     }),
                 password: Yup.string().required('A senha é obrigatória.'),
                 institution: Yup.string().required('Selecione uma instituição.')
+
+
             })
             }
             onSubmit={handleSubmit}
